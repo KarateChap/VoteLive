@@ -9,6 +9,16 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SliderModule } from 'primeng/slider';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { ToastModule } from 'primeng/toast';
+import { MenubarModule } from 'primeng/menubar';
+import { BadgeModule } from 'primeng/badge';
+import { AvatarModule } from 'primeng/avatar';
+import { RippleModule } from 'primeng/ripple';
+import { PanelModule } from 'primeng/panel';
+import { CardModule } from 'primeng/card';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
 
 @NgModule({
   exports: [
@@ -18,11 +28,19 @@ import { ToastModule } from 'primeng/toast';
     InputGroupModule,
     InputGroupAddonModule,
     InputTextModule,
-    InputGroupModule,
-    InputGroupAddonModule,
     SliderModule,
     SplitButtonModule,
     ToastModule,
+    MenubarModule,
+    BadgeModule,
+    AvatarModule,
+    RippleModule,
+    PanelModule,
+    CardModule,
+    IconFieldModule,
+    InputIconModule,
+    PasswordModule,
+    DividerModule,
   ],
   providers: [MessageService],
 })

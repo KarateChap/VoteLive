@@ -7,17 +7,21 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PrimeNgModule } from './shared/primeng.module';
 import { HttpClientModule } from '@angular/common/http';
+import { HeaderComponent } from './layout/header/header.component';
+import { LayoutComponent } from './layout/layout.component';
+import { AuthComponent } from './pages/auth/auth.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HeaderComponent, LayoutComponent, AuthComponent],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+    AppRoutingModule,
     PrimeNgModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot([]),
   ],
   bootstrap: [AppComponent],
 })

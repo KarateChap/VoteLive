@@ -1,0 +1,50 @@
+<div
+  class="flex justify-center items-center w-full h-[100vh] bg-[url('/assets/subtle-prism.svg')] px-4"
+>
+  <div class="card flex justify-content-center">
+    <p-card styleClass="px-7 relative">
+      <!-- <img
+        src="../../../assets/vote-live.png"
+        class="absolute w-[120px] top-[-37px] right-[-0px] shadow-sm"
+      /> -->
+      <h2>Log in</h2>
+      <p>Please enter your details</p>
+
+      <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-5">
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="email"
+            placeholder="Email"
+          />
+          <p-password
+            [(ngModel)]="password"
+            [toggleMask]="true"
+            placeholder="Password"
+          >
+            <ng-template pTemplate="header">
+              <h6>Pick a password</h6>
+            </ng-template>
+            <ng-template pTemplate="footer">
+              <p-divider />
+              <p class="mt-2">Suggestions</p>
+              <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                <li>At least one lowercase</li>
+                <li>At least one uppercase</li>
+                <li>At least one numeric</li>
+                <li>Minimum 8 characters</li>
+              </ul>
+            </ng-template>
+          </p-password>
+        </div>
+        <div class="flex justify-between gap-6">
+          <div class="w-full">
+            <p-button label="Log In" size="small" styleClass="w-full" />
+          </div>
+          <p class="text-sm hover:text-[#3b82f6] cursor-pointer">Register</p>
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>

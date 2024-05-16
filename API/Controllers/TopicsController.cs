@@ -1,28 +1,48 @@
-﻿using Domain;
+﻿using Application;
+using Application.Topics;
+using Domain;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence;
 
-namespace API;
+
+namespace API.Controllers;
 
 public class TopicsController : BaseApiController
 {
-    private readonly DataContext _context;
-
-    public TopicsController(DataContext context)
-    {
-        _context = context;
-    }
-
     [HttpGet]
-    public async Task<ActionResult<List<Topic>>> getTopics()
+    public async Task<ActionResult<List<TopicDto>>> GetTopics()
     {
-        return await _context.Topics.Include(x => x.Options).ToListAsync();
+        return await Mediator.Send(new List.Query());
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Topic>> getTopic()
+    public async Task<ActionResult<TopicDto>> GetTopic(Guid id)
     {
-        return await _context.Topics.Include(x => x.Options).FirstOrDefaultAsync();
+        return await Mediator.Send(new Details.Query { Id = id });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateTopic(Topic topic)
+    {
+        await Mediator.Send(new Create.Command { Topic = topic });
+
+        return Ok();
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> EditTopic(Guid id, Topic topic)
+    {
+        topic.Id = id;
+
+        await Mediator.Send(new Edit.Command { Topic = topic });
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTopic(Guid id)
+    {
+        await Mediator.Send(new Delete.Command { Id = id });
+
+        return Ok();
     }
 }
