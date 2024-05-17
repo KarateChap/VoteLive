@@ -1,0 +1,28 @@
+<div
+  class="flex justify-center items-center w-full h-[100vh] bg-[url('/assets/liquid-cheese-error.svg')] bg-no-repeat bg-cover p-5"
+>
+  <ng-container *ngIf="error$ | async as error">
+    <div class="flex flex-col justify-center w-full md:w-[750px] gap-5">
+      <p class="text-2xl font-bold text-center mb-[-8px]">
+        {{ error.message }}
+      </p>
+      <div class="w-full flex justify-center">
+        <p-tag
+          severity="danger"
+          [value]="error.statusCode.toString()"
+          styleClass="text-xl md:text-3xl w-[230px]"
+        />
+      </div>
+      <p-panel
+        header="Stack Trace"
+        [toggleable]="true"
+        styleClass="max-h-[80vh] overflow-y-auto"
+      >
+        <p>{{ error.details }}</p>
+      </p-panel>
+      <div class="w-full flex justify-center">
+        <p-button label="Go to home" routerLink="/app/topics-list" />
+      </div>
+    </div>
+  </ng-container>
+</div>

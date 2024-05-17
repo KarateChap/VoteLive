@@ -1,0 +1,138 @@
+<form
+  [formGroup]="topicForm"
+  (ngSubmit)="onSubmit()"
+  class="w-full flex flex-col"
+  autocomplete="off"
+>
+  <p-stepper>
+    <p-stepperPanel header="Topic Details">
+      <ng-template
+        pTemplate="content"
+        let-nextCallback="nextCallback"
+        let-index="index"
+      >
+        <div class="flex flex-col gap-8 mt-[10px]">
+          <p-floatLabel>
+            <input
+              pInputText
+              id="title"
+              formControlName="title"
+              class="w-full"
+            />
+            <label for="title">Title</label>
+          </p-floatLabel>
+          <p-floatLabel>
+            <textarea
+              id="topicDescription"
+              formControlName="topicDescription"
+              rows="5"
+              cols="30"
+              pInputTextarea
+            >
+            </textarea>
+            <label for="topicDescription">Description</label>
+          </p-floatLabel>
+        </div>
+        <div
+          class="flex pt-4 items-center"
+          [ngClass]="{
+            'justify-between': !this.isAdd,
+            'justify-end': this.isAdd
+          }"
+        >
+          <div *ngIf="!this.isAdd" class="flex items-center gap-4">
+            <span>Completed: </span>
+            <p-inputSwitch id="isCompleted" formControlName="isCompleted" />
+          </div>
+          <p-button
+            size="small"
+            label="Next"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            (onClick)="nextCallback.emit()"
+          />
+        </div>
+      </ng-template>
+    </p-stepperPanel>
+    <p-stepperPanel header="Options">
+      <ng-template
+        pTemplate="content"
+        let-prevCallback="prevCallback"
+        let-nextCallback="nextCallback"
+        let-index="index"
+      >
+        <div class="flex flex-col">
+          <p class="mt-[-10px] font-bold">
+            Add options to your {{ isAdd ? "new" : "existing" }} poll:
+          </p>
+
+          <div class="flex flex-col gap-1" formArrayName="options">
+            <div
+              class="flex gap-2 mb-4 items-center"
+              *ngFor="let option of options.controls; let i = index"
+              [formGroupName]="i"
+            >
+              <p-inputGroup>
+                <input
+                  type="text"
+                  pInputText
+                  placeholder="Enter option"
+                  formControlName="optionDescription"
+                />
+                <button
+                  *ngIf="options.length > 1"
+                  type="button"
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-button-danger"
+                  (click)="removeOption(i)"
+                ></button>
+                <button
+                  *ngIf="i === options.length - 1"
+                  type="button"
+                  pButton
+                  icon="pi pi-plus"
+                  (click)="addOption()"
+                ></button>
+              </p-inputGroup>
+            </div>
+          </div>
+          <span class="text-[#dc2727] text-sm" *ngIf="!isAdd">
+            <i class="pi pi-exclamation-triangle"></i>
+            Editing the poll will reset all of the votes
+          </span>
+        </div>
+        <div class="flex pt-4 justify-between">
+          <p-button
+            size="small"
+            label="Back"
+            icon="pi pi-arrow-left"
+            (onClick)="prevCallback.emit()"
+          />
+          <p-button
+            size="small"
+            label="Save"
+            icon="pi pi-save"
+            iconPos="right"
+            type="submit"
+            [disabled]="!topicForm.valid || !topicForm.touched"
+            [loading]="isSubmitting$ | async"
+          />
+        </div>
+      </ng-template>
+    </p-stepperPanel>
+  </p-stepper>
+
+  <!-- <div class="mt-5 flex flex-col gap-8 w-full">
+    <p-floatLabel>
+      <input pInputText id="username" class="w-full" />
+      <label for="username">Title</label>
+    </p-floatLabel>
+    <p-floatLabel>
+      <textarea id="float-input" rows="5" cols="30" pInputTextarea> </textarea>
+      <label for="float-input">Description</label>
+    </p-floatLabel>
+  </div>
+
+  <p class="font-bold">Options:</p> -->
+</form>

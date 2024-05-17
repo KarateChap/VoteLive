@@ -1,0 +1,65 @@
+<div *ngIf="topic">
+  <p-panel [toggleable]="true">
+    <ng-template pTemplate="header">
+      <div class="flex flex-wrap items-center gap-2">
+        <p-avatar
+          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+          size="large"
+          shape="circle"
+        />
+        <span
+          class="font-bold cursor-pointer hover:underline"
+          (click)="navigateToTopicDetails()"
+        >
+          {{ topic.title }}
+        </span>
+        <p-tag
+          severity="success"
+          value="Active"
+          styleClass="w-[75px] py-1 mt-[2px]"
+        />
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <p-buttonGroup>
+            <p-button
+              label="Vote"
+              icon="pi pi-check"
+              size="small"
+              [disabled]="!selectedCategory"
+            />
+            <p-button
+              label="Show Result"
+              icon="pi pi-chart-bar"
+              outlined="true"
+              size="small"
+              (click)="navigateToTopicDetails()"
+            />
+          </p-buttonGroup>
+        </div>
+        <span class="p-text-secondary"> 123 votes </span>
+      </div>
+    </ng-template>
+
+    <div class="flex flex-col gap-4">
+      <p>{{ topic.topicDescription }}</p>
+      <div class="card flex justify-content-center">
+        <div class="flex flex-col gap-4">
+          <div *ngFor="let category of categories" class="flex items-center">
+            <p-radioButton
+              [inputId]="category.key"
+              name="category"
+              [value]="category"
+              [(ngModel)]="selectedCategory"
+            />
+            <label [for]="category.key" class="ml-2">
+              {{ category.name }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</div>

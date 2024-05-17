@@ -1,0 +1,28 @@
+<div class="w-full flex flex-col gap-4">
+  <div class="w-full flex flex-col gap-10 justify-center items-center">
+    <div class="text-center w-full md:w-[750px]">
+      <h1 class="text-4xl">Vote Live</h1>
+      <p>
+        Engage with real-time decisions! Cast your vote instantly and see live
+        results with our seamless voting app. Perfect for events, meetings, and
+        interactive sessions.
+      </p>
+      <div class="w-full flex justify-center">
+        <p-button
+          label="Create a new poll"
+          icon="pi pi-plus"
+          size="small"
+          (onClick)="openManageTopicModal()"
+        />
+      </div>
+    </div>
+    <div class="w-full md:w-[750px] flex flex-col gap-5">
+      <ng-container *ngIf="data$ | async as data">
+        <app-topic *ngFor="let topic of data.topics" [topic]="topic">
+        </app-topic>
+
+        <app-card-skeleton *ngIf="data.isLoading"></app-card-skeleton>
+      </ng-container>
+    </div>
+  </div>
+</div>

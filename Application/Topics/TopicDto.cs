@@ -1,6 +1,6 @@
 ﻿using Application.Options;
 
-namespace Application;
+namespace Application.Topics;
 
 public class TopicDto
 {

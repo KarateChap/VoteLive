@@ -1,0 +1,159 @@
+<ng-container *ngIf="data$ | async as data">
+  <ng-container>
+    <div class="w-full flex justify-center">
+      <div class="md:w-[750px]">
+        <app-card-skeleton *ngIf="data.isLoading" />
+        <div class="card flex flex-col gap-4" *ngIf="topic">
+          <p-breadcrumb
+            class="max-w-full"
+            [model]="breadCrumbItems"
+            [home]="home"
+          />
+          <p-panel>
+            <ng-template pTemplate="header">
+              <div class="flex flex-wrap items-center gap-2">
+                <p-avatar
+                  image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                  size="large"
+                  shape="circle"
+                />
+                <span class="font-bold"> {{ topic.title }} </span>
+                <p-tag
+                  styleClass="w-[75px] py-1 mt-[2px]"
+                  [severity]="topic.isCompleted ? 'success' : 'info'"
+                  [value]="topic.isCompleted ? 'Completed' : 'Active'"
+                />
+              </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2">
+                  <span>Comments </span>
+                  <p-avatar
+                    label="4"
+                    styleClass="mr-2"
+                    [style]="{
+                      'background-color': '#dee9fc',
+                      color: '#1a2551'
+                    }"
+                    shape="circle"
+                  />
+                </div>
+                <span class="p-text-secondary"> 123 votes </span>
+              </div>
+            </ng-template>
+
+            <ng-template pTemplate="icons">
+              <button
+                class="p-panel-header-icon p-link mr-2"
+                (click)="menu.toggle($event)"
+              >
+                <span class="pi pi-file-edit text-xl"></span>
+              </button>
+              <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
+            </ng-template>
+
+            <div class="flex flex-col gap-4">
+              <p>{{ topic.topicDescription }}</p>
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-4">
+                  <div
+                    class="w-full flex flex-col gap-2"
+                    *ngFor="let option of topic.options"
+                  >
+                    <div class="w-full flex justify-between">
+                      <span>{{ option.optionDescription }}</span>
+                      <span>10 votes</span>
+                    </div>
+                    <p-progressBar [value]="55" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="w-full flex items-end justify-end mt-4">
+                <p-buttonGroup>
+                  <p-button
+                    label="Back to poll"
+                    icon="pi pi-arrow-left"
+                    size="small"
+                    routerLink="/app/topics-list"
+                  />
+                  <p-button
+                    label="Live results"
+                    icon="pi pi-wifi"
+                    outlined="true"
+                    size="small"
+                    styleClass="hover:cursor-default"
+                    plain="true"
+                  />
+                </p-buttonGroup>
+              </div>
+            </div>
+          </p-panel>
+        </div>
+
+        <div class="w-full flex flex-col py-5">
+          <div class="flex flex-col gap-4">
+            <p-fieldset>
+              <ng-template pTemplate="header">
+                <div class="flex items-center gap-2 px-2">
+                  <p-avatar
+                    image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                    shape="circle"
+                  />
+                  <div class="flex flex-col">
+                    <span class="font-bold">Amy Elsner</span>
+                    <span class="text-sm font-medium text-gray-500"
+                      >03 May 2024</span
+                    >
+                  </div>
+                </div>
+              </ng-template>
+              <p class="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </p-fieldset>
+            <p-fieldset>
+              <ng-template pTemplate="header">
+                <div class="flex items-center gap-2 px-2">
+                  <p-avatar
+                    image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+                    shape="circle"
+                  />
+                  <div class="flex flex-col">
+                    <span class="font-bold">Amy Elsner</span>
+                    <span class="text-sm font-medium text-gray-500"
+                      >03 May 2024</span
+                    >
+                  </div>
+                </div>
+              </ng-template>
+              <p class="m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </p-fieldset>
+          </div>
+
+          <h3>Post a Comment</h3>
+          <div class="flex flex-col gap-4">
+            <textarea rows="5" cols="30" pInputTextarea></textarea>
+            <div class="flex w-full justify-end">
+              <p-button label="Post Comment" size="small" plain="true" />
+            </div>
+          </div>
+        </div>
+      </div></div
+  ></ng-container>
+</ng-container>

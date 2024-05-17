@@ -9,20 +9,32 @@ const routes: Routes = [
     component: AuthComponent,
     pathMatch: 'full',
   },
-  //   {
-  //     path: 'app',
-  //     component: LayoutComponent,
-  //     children: [
-  //         {
-  //             path: '',
-  //             loadChildren: () => import().then((mod) => mod)
-  //         }
-  //     ]
-  //   }
+  {
+    path: 'test-errors',
+    loadChildren: () =>
+      import('./pages/test-errors/test-errors.module').then(
+        (mod) => mod.TestErrorsModule
+      ),
+  },
+  {
+    path: 'app',
+    component: LayoutComponent,
+    children: [
+      {
+        path: 'topics-list',
+        loadChildren: () =>
+          import('./pages/topics-list/topics-list.module').then(
+            (mod) => mod.TopicsListModule
+          ),
+      },
+    ],
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.Core;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
@@ -9,9 +10,9 @@ namespace Application.Topics;
 
 public class List
 {
-    public class Query : IRequest<List<TopicDto>> { }
+    public class Query : IRequest<Result<List<TopicDto>>> { }
 
-    public class Handler : IRequestHandler<Query, List<TopicDto>>
+    public class Handler : IRequestHandler<Query, Result<List<TopicDto>>>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -22,9 +23,9 @@ public class List
             _mapper = mapper;
         }
 
-        public async Task<List<TopicDto>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<List<TopicDto>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            return await _context.Topics.ProjectTo<TopicDto>(_mapper.ConfigurationProvider).ToListAsync();
+            return Result<List<TopicDto>>.Success(await _context.Topics.ProjectTo<TopicDto>(_mapper.ConfigurationProvider).ToListAsync());
         }
     }
 }

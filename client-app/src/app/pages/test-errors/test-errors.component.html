@@ -1,0 +1,14 @@
+<div
+  class="flex justify-center w-full items-center h-[100vh] bg-[url('/assets/liquid-cheese.svg')] bg-no-repeat bg-cover p-5"
+>
+  <div class="w-full flex justify-center">
+    <div class="w-full md:w-[750px] flex gap-4 flex-wrap justify-center">
+      <p-button label="Not Found" (onClick)="handleNotFound()" />
+      <p-button label="Bad Request" (onClick)="handleBadRequest()" />
+      <p-button label="Validation Error" (onClick)="handleValidationError()" />
+      <p-button label="Server Error" (onClick)="handleServerError()" />
+      <p-button label="Unauthorised" (onClick)="handleUnauthorised()" />
+      <p-button label="Bad Guid" (onClick)="handleBadGuid()" />
+    </div>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 ﻿using Application.Options;
+using Application.Topics;
 using AutoMapper;
 using Domain;
 

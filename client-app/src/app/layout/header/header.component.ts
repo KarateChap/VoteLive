@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -8,62 +9,57 @@ import { MenuItem } from 'primeng/api';
 })
 export class HeaderComponent implements OnInit {
   items: MenuItem[] | undefined;
+  menuItems: MenuItem[] | undefined;
+
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.items = [
       {
         label: 'Home',
         icon: 'pi pi-home',
+        command: (event: any) => this.onNavClicked(event.item.label),
       },
       {
-        label: 'Features',
-        icon: 'pi pi-star',
+        label: 'Guide',
+        icon: 'pi pi-book',
+        command: (event: any) => this.onNavClicked(event.item.label),
       },
       {
-        label: 'Projects',
-        icon: 'pi pi-search',
-        items: [
-          {
-            label: 'Core',
-            icon: 'pi pi-bolt',
-            shortcut: '⌘+S',
-          },
-          {
-            label: 'Blocks',
-            icon: 'pi pi-server',
-            shortcut: '⌘+B',
-          },
-          {
-            label: 'UI Kit',
-            icon: 'pi pi-pencil',
-            shortcut: '⌘+U',
-          },
-          {
-            separator: true,
-          },
-          {
-            label: 'Templates',
-            icon: 'pi pi-palette',
-            items: [
-              {
-                label: 'Apollo',
-                icon: 'pi pi-palette',
-                badge: '2',
-              },
-              {
-                label: 'Ultima',
-                icon: 'pi pi-palette',
-                badge: '3',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        label: 'Contact',
-        icon: 'pi pi-envelope',
-        badge: '3',
+        label: 'Test Errors',
+        icon: 'pi pi-times-circle',
+        command: (event: any) => this.onNavClicked(event.item.label),
       },
     ];
+
+    this.menuItems = [
+      {
+        label: 'Profile Settings',
+        icon: 'pi pi-cog',
+        command: (event: any) => this.onMenuClicked(event.item.label),
+      },
+      {
+        label: 'Logout',
+        icon: 'pi pi-sign-out',
+        command: (event: any) => this.onMenuClicked(event.item.label),
+      },
+    ];
+  }
+
+  onNavClicked(option: string) {
+    if (option === 'Home') {
+      this.router.navigateByUrl('/app/topics-list');
+    } else if (option === 'Guide') {
+      this.router.navigateByUrl('/app/topics-list');
+    } else {
+      this.router.navigateByUrl('/test-errors');
+    }
+  }
+
+  onMenuClicked(option: string) {
+    if (option === 'Logout') {
+      this.router.navigateByUrl('/');
+    } else {
+    }
   }
 }

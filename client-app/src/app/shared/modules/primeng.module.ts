@@ -19,10 +19,27 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { PasswordModule } from 'primeng/password';
 import { DividerModule } from 'primeng/divider';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { MenuModule } from 'primeng/menu';
+import { ButtonGroupModule } from 'primeng/buttongroup';
+import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FieldsetModule } from 'primeng/fieldset';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { DialogModule } from 'primeng/dialog';
+import { DialogService, DynamicDialogModule } from 'primeng/dynamicdialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { StepperModule } from 'primeng/stepper';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
   exports: [
     ButtonModule,
+    ButtonGroupModule,
     CalendarModule,
     DropdownModule,
     InputGroupModule,
@@ -41,7 +58,22 @@ import { DividerModule } from 'primeng/divider';
     InputIconModule,
     PasswordModule,
     DividerModule,
+    RadioButtonModule,
+    MenuModule,
+    TooltipModule,
+    FieldsetModule,
+    TagModule,
+    InputTextareaModule,
+    ProgressBarModule,
+    BreadcrumbModule,
+    DialogModule,
+    DynamicDialogModule,
+    FloatLabelModule,
+    StepperModule,
+    ToggleButtonModule,
+    InputSwitchModule,
+    SkeletonModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, DialogService],
 })
 export class PrimeNgModule {}
