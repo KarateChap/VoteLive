@@ -1,4 +1,5 @@
-﻿using Application;
+﻿using API.DTOs;
+using Application;
 using Application.Core;
 using Application.Topics;
 using Domain;
@@ -30,7 +31,7 @@ public class TopicsController : BaseApiController
 
     [Authorize(Policy = "IsTopicOwner")]
     [HttpPut("{id}")]
-    public async Task<IActionResult> EditTopic(Guid id, Topic topic)
+    public async Task<ActionResult<TopicDto>> EditTopic(Guid id, Topic topic)
     {
         topic.Id = id;
 
@@ -45,9 +46,9 @@ public class TopicsController : BaseApiController
     }
 
 
-    [HttpPost("{id}/update-vote")]
-    public async Task<IActionResult> UpdateVote(Guid id)
+    [HttpPost("update-vote")]
+    public async Task<IActionResult> UpdateVote(UpdateVoteDto updateVoteDto)
     {
-        return HandleResult(await Mediator.Send(new UpdateVote.Command { Id = id }));
+        return HandleResult(await Mediator.Send(new UpdateVote.Command { OptionId = updateVoteDto.OptionId, TopicId = updateVoteDto.TopicId }));
     }
 }

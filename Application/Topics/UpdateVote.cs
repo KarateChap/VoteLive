@@ -10,7 +10,8 @@ public class UpdateVote
 {
     public class Command : IRequest<Result<Unit>>
     {
-        public Guid Id { get; set; }
+        public Guid OptionId { get; set; }
+        public Guid TopicId { get; set; }
     }
 
     public class Handler : IRequestHandler<Command, Result<Unit>>
@@ -26,33 +27,41 @@ public class UpdateVote
 
         public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var option = await _context.Options
-                .Include(v => v.Voters).ThenInclude(u => u.AppUser)
-                .FirstOrDefaultAsync(x => x.Id == request.Id);
-
-            if (option == null) return null;
-
             var user = await _context.Users.FirstOrDefaultAsync(x =>
                 x.UserName == _userAccessor.GetUsername());
 
             if (user == null) return null;
 
-            var voter = option.Voters.FirstOrDefault(x => x.AppUser.UserName == user.UserName);
+            var topic = await _context.Topics
+                .Include(o => o.Options)
+                .ThenInclude(v => v.Voters)
+                .ThenInclude(u => u.AppUser)
+                .FirstOrDefaultAsync(x => x.Id == request.TopicId);
 
-            if (option.Voters.Any(x => x.AppUser == user))
-            {
-                option.Voters.Remove(voter);
-            }
+            if (topic == null) return null;
 
-            else
+            foreach (var option in topic.Options)
             {
-                voter = new Domain.UserOption
+                var userVote = option.Voters.FirstOrDefault(v => v.AppUserId == user.Id);
+                if (userVote != null)
                 {
-                    AppUser = user,
-                    Option = option,
-                };
-                option.Voters.Add(voter);
+                    option.Voters.Remove(userVote);
+                }
             }
+
+            var selectedOption = await _context.Options
+                .Include(v => v.Voters).ThenInclude(u => u.AppUser)
+                .FirstOrDefaultAsync(x => x.Id == request.OptionId);
+
+            if (selectedOption == null) return null;
+
+            var newVote = new Domain.UserOption
+            {
+                AppUser = user,
+                Option = selectedOption,
+            };
+            selectedOption.Voters.Add(newVote);
+
 
             var result = await _context.SaveChangesAsync() > 0;
 

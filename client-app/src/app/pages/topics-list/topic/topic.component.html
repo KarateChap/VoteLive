@@ -3,7 +3,11 @@
     <ng-template pTemplate="header">
       <div class="flex flex-wrap items-center gap-2">
         <p-avatar
-          image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+          [image]="
+            topic.creator.imageUrl
+              ? topic.creator.imageUrl
+              : '/assets/user-dummy.jpg'
+          "
           size="large"
           shape="circle"
         />
@@ -13,11 +17,6 @@
         >
           {{ topic.title }}
         </span>
-        <p-tag
-          severity="success"
-          value="Active"
-          styleClass="w-[75px] py-1 mt-[2px]"
-        />
       </div>
     </ng-template>
     <ng-template pTemplate="footer">
@@ -29,6 +28,7 @@
               icon="pi pi-check"
               size="small"
               [disabled]="!selectedCategory"
+              (click)="submitVote()"
             />
             <p-button
               label="Show Result"
@@ -39,7 +39,9 @@
             />
           </p-buttonGroup>
         </div>
-        <span class="p-text-secondary"> 123 votes </span>
+        <span class="p-text-secondary">
+          {{ utilityService.getTotalVoteCounts(topic.options) }} votes
+        </span>
       </div>
     </ng-template>
 

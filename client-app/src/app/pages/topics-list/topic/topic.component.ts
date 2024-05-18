@@ -3,6 +3,16 @@ import { Topic } from '../types/topic.interface';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { topicActions } from '../store/topic.actions';
+import { Option } from '../types/option.interface';
+import { UtilityService } from '../../../shared/services/utility.service';
+import { User } from '../../auth/types/user.interface';
+import { UpdateVote } from '../types/update-vote';
+import { selectIsSubmitting } from '../store/topic.reducers';
+
+interface Category {
+  name: string;
+  key: string;
+}
 
 @Component({
   selector: 'app-topic',
@@ -11,10 +21,12 @@ import { topicActions } from '../store/topic.actions';
 })
 export class TopicComponent implements OnInit {
   @Input() topic: Topic | null = null;
+  @Input() currentUser: User | null = null;
 
-  selectedCategory: any = null;
+  selectedCategory: Category | null = null;
+  initialSelectedVote: Category | null = null;
 
-  categories: any[] = [
+  categories: Category[] = [
     { name: 'Accounting', key: 'A' },
     { name: 'Marketing', key: 'M' },
     { name: 'Production', key: 'P' },
@@ -23,17 +35,10 @@ export class TopicComponent implements OnInit {
 
   items: { label?: string; icon?: string; separator?: boolean }[] = [];
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, public utilityService: UtilityService) {}
 
   ngOnInit() {
-    if (this.topic) {
-      this.categories = this.topic?.options.map((item) => {
-        return {
-          name: item.optionDescription,
-          key: item.id,
-        };
-      });
-    }
+    this.initializeRadioButtons();
 
     this.items = [
       {
@@ -47,9 +52,56 @@ export class TopicComponent implements OnInit {
     ];
   }
 
+  private initializeRadioButtons() {
+    if (this.topic) {
+      this.categories = this.topic.options.map((item) => {
+        return {
+          name: item.optionDescription,
+          key: item.id,
+        };
+      });
+
+      this.topic.options.map((item: Option) => {
+        item.voters.map((vote) => {
+          if (vote.username === this.currentUser?.username) {
+            this.initialSelectedVote = {
+              name: item.optionDescription,
+              key: item.id,
+            };
+          }
+        });
+      });
+
+      if (this.initialSelectedVote && this.initialSelectedVote) {
+        const index = this.categories.findIndex(
+          (category: Category) => category.key === this.initialSelectedVote!.key
+        );
+        this.selectedCategory = this.categories[index];
+      }
+    }
+  }
+
   navigateToTopicDetails() {
     if (this.topic) {
       this.store.dispatch(topicActions.setCurrentTopic({ topic: this.topic }));
+    }
+  }
+
+  submitVote() {
+    if (
+      this.topic &&
+      this.selectedCategory &&
+      this.topic.id !== undefined &&
+      this.currentUser
+    ) {
+      const updateVote: UpdateVote = {
+        topicId: this.topic.id,
+        optionId: this.selectedCategory?.key,
+      };
+
+      this.store.dispatch(
+        topicActions.updateVote({ updateVote, currentUser: this.currentUser })
+      );
     }
   }
 }

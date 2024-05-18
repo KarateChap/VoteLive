@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Topic } from './types/topic.interface';
 import { HttpClient } from '@angular/common/http';
+import { UpdateVote } from './types/update-vote';
 
 @Injectable({
   providedIn: 'root',
@@ -24,11 +25,15 @@ export class TopicsListService {
     return this.http.post<Topic>(`${this.baseUrl}api/topics`, topic);
   }
 
-  updateTopic(topic: Topic) {
-    return this.http.put(`${this.baseUrl}api/topics/${topic.id}`, topic);
+  updateTopic(topic: Topic): Observable<Topic> {
+    return this.http.put<Topic>(`${this.baseUrl}api/topics/${topic.id}`, topic);
   }
 
   deleteTopic(id: string) {
     return this.http.delete(`${this.baseUrl}api/topics/${id}`);
+  }
+
+  updateVote(updateVote: UpdateVote) {
+    return this.http.post(`${this.baseUrl}api/topics/update-vote`, updateVote);
   }
 }

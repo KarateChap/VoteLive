@@ -7,6 +7,7 @@ import { topicActions } from './store/topic.actions';
 import { combineLatest } from 'rxjs';
 import { selectIsLoading, selectTopics } from './store/topic.reducers';
 import { ModalService } from '../../shared/services/modal.service';
+import { selectCurrentUser } from '../auth/store/auth.reducers';
 
 @Component({
   selector: 'app-topics-list',
@@ -20,6 +21,7 @@ export class TopicsListComponent implements OnInit {
   data$ = combineLatest({
     isLoading: this.store.select(selectIsLoading),
     topics: this.store.select(selectTopics),
+    currentUser: this.store.select(selectCurrentUser),
   });
 
   constructor(
@@ -30,10 +32,10 @@ export class TopicsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.data$.subscribe(({ topics }) => {
-      // if (!topics || topics.length <= 1) {
-      //   this.getTopics();
-      // }
-      if (topics === null && this.isTopicRequest === false) {
+      if (
+        (topics === null || topics.length === 0) &&
+        this.isTopicRequest === false
+      ) {
         this.getTopics();
         this.isTopicRequest = true;
       }
@@ -58,5 +60,9 @@ export class TopicsListComponent implements OnInit {
       next: () => {},
       error: (error) => console.log(error),
     });
+  }
+
+  trackByFn(index: number, item: any): number {
+    return item.id;
   }
 }

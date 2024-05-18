@@ -1,6 +1,7 @@
 ﻿using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -11,7 +12,8 @@ namespace Application.Topics;
 
 public class Edit
 {
-    public class Command : IRequest<Result<Unit>>
+    public class Command : IRequest<Result<TopicDto
+    >>
     {
         public Topic Topic { get; set; }
     }
@@ -24,7 +26,7 @@ public class Edit
         }
     }
 
-    public class Handler : IRequestHandler<Command, Result<Unit>>
+    public class Handler : IRequestHandler<Command, Result<TopicDto>>
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
@@ -37,7 +39,7 @@ public class Edit
             _userAccessor = userAccessor;
         }
 
-        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<TopicDto>> Handle(Command request, CancellationToken cancellationToken)
         {
             var topic = await _context.Topics.Include(x => x.Options).FirstOrDefaultAsync(x => x.Id == request.Topic.Id);
 
@@ -51,9 +53,9 @@ public class Edit
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (!result) return Result<Unit>.Failure("Failed to update activity");
+            if (!result) return Result<TopicDto>.Failure("Failed to update activity");
 
-            return Result<Unit>.Success(Unit.Value);
+            return Result<TopicDto>.Success(await _context.Topics.ProjectTo<TopicDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Id == request.Topic.Id));
         }
     }
 }

@@ -65,7 +65,7 @@ export class AuthComponent implements OnInit {
       const loginUser: LoginUser = {
         ...this.authForm.value,
       };
-      console.log(loginUser);
+
       this.store.dispatch(authActions.login({ loginUser }));
     } else {
       const registerUser: RegisterUser = {
@@ -76,7 +76,6 @@ export class AuthComponent implements OnInit {
   }
 
   toggleRegisterLogin() {
-    console.log(this.authForm.value);
     this.isRegister = !this.isRegister;
     this.initializeForm();
   }

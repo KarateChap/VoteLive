@@ -46,13 +46,13 @@ public class Create
 
             topic.AppUser = user;
 
-            _context.Add(request.Topic);
+            _context.Add(topic);
 
             var result = await _context.SaveChangesAsync() > 0;
 
             if (!result) return Result<TopicDto>.Failure("Failed to create the topic");
 
-            return Result<TopicDto>.Success(_mapper.Map<TopicDto>(request.Topic));
+            return Result<TopicDto>.Success(_mapper.Map<TopicDto>(topic));
         }
     }
 }

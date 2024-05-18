@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Topic } from '../types/topic.interface';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ManageTopicComponent } from '../manage-topic/manage-topic.component';
@@ -9,6 +9,10 @@ import { Store } from '@ngrx/store';
 import { topicActions } from '../store/topic.actions';
 import { combineLatest } from 'rxjs';
 import { selectIsLoading, selectSelectedTopic } from '../store/topic.reducers';
+import { UtilityService } from '../../../shared/services/utility.service';
+import { Option } from '../types/option.interface';
+import { selectCurrentUser } from '../../auth/store/auth.reducers';
+import { User } from '../../auth/types/user.interface';
 
 @Component({
   selector: 'app-topic-detail',
@@ -28,12 +32,15 @@ export class TopicDetailComponent implements OnInit {
     selectedTopic: this.store.select(selectSelectedTopic),
   });
 
+  currentUser$ = this.store.select(selectCurrentUser);
+
   constructor(
     private route: ActivatedRoute,
     public dialogService: DialogService,
     private modalService: ModalService,
     private store: Store,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    public utilityService: UtilityService
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +69,7 @@ export class TopicDetailComponent implements OnInit {
 
     this.data$.subscribe((data) => {
       this.topic = data.selectedTopic;
+      console.log(this.topic);
       if (this.topic == null && this.topicId) this.getTopic(this.topicId);
     });
   }
@@ -99,5 +107,21 @@ export class TopicDetailComponent implements OnInit {
         reject: () => {},
       });
     }
+  }
+
+  calculateProgressPercentage(
+    options: Option[],
+    currentOption: Option
+  ): number {
+    let totalVoteCount = this.utilityService.getTotalVoteCounts(options);
+    let percentage = (currentOption.voters.length / totalVoteCount) * 100;
+    return parseFloat(percentage.toFixed(2));
+  }
+
+  checkIfAllowedToEdit(currentUser: User): boolean {
+    if (this.topic?.creator.username === currentUser.username) {
+      return true;
+    }
+    return false;
   }
 }

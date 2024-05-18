@@ -96,6 +96,52 @@ const topicFeature = createFeature({
       ...state,
       isLoading: false,
       selectedTopic: action.topic,
+    })),
+
+    //update vote
+    on(topicActions.updateVote, (state) => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(topicActions.updateVoteSuccess, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      topics: (state.topics || []).map((topic) =>
+        topic.id === action.updateVote.topicId
+          ? {
+              ...topic,
+              options: (topic.options || []).map((option) =>
+                option.id === action.updateVote.optionId
+                  ? {
+                      ...option,
+                      voters: [
+                        ...(option.voters || []).filter(
+                          (voter) =>
+                            voter.username !== action.currentUser.username
+                        ),
+                        {
+                          firstName: action.currentUser.firstName,
+                          lastName: action.currentUser.lastName,
+                          username: action.currentUser.username,
+                          imageUrl: action.currentUser.imageUrl || '',
+                        },
+                      ],
+                    }
+                  : {
+                      ...option,
+                      voters: (option.voters || []).filter(
+                        (voter) =>
+                          voter.username !== action.currentUser.username
+                      ),
+                    }
+              ),
+            }
+          : topic
+      ),
+    })),
+    on(topicActions.updateVoteFailure, (state) => ({
+      ...state,
+      isSubmitting: false,
     }))
   ),
 });

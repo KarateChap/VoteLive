@@ -71,14 +71,14 @@ export const updateTopicEffect = createEffect(
       ofType(topicActions.updateTopic),
       switchMap(({ topic }) => {
         return topicListService.updateTopic(topic).pipe(
-          map(() => {
+          map((newTopic) => {
             toastService.fireToast(
               'success',
               'Success',
               'The topic has been updated successfully.'
             );
             modalService.closeModal();
-            return topicActions.updateTopicSuccess({ topic });
+            return topicActions.updateTopicSuccess({ topic: newTopic });
           }),
           catchError((error) => {
             return of(topicActions.updateTopicFailure());
@@ -150,6 +150,35 @@ export const setCurrentTopicEffect = createEffect(
         router.navigateByUrl(`/app/topics-list/${topic.id}`);
       }),
       map(({ topic }) => topicActions.setCurrentTopicSuccess({ topic }))
+    );
+  },
+  { functional: true }
+);
+
+export const updateVoteEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    topicListService = inject(TopicsListService),
+    toastService = inject(ToastService)
+  ) => {
+    return actions$.pipe(
+      ofType(topicActions.updateVote),
+      switchMap(({ updateVote, currentUser }) => {
+        return topicListService.updateVote(updateVote).pipe(
+          map(() => {
+            toastService.fireToast(
+              'success',
+              'Success',
+              'The vote successfully submitted.'
+            );
+
+            return topicActions.updateVoteSuccess({ updateVote, currentUser });
+          }),
+          catchError((error) => {
+            return of(topicActions.updateVoteFailure());
+          })
+        );
+      })
     );
   },
   { functional: true }

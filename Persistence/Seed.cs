@@ -30,8 +30,7 @@ public class Seed
             {
                 Title = "Who is the most handsome?",
                 TopicDescription = "Choose the most handsome among these choices",
-                IsCompleted = false,
-                IsMultiVote = false,
+
                 CreatedAt = DateTime.UtcNow,
                 Options = [
                     new Option {
@@ -50,8 +49,7 @@ public class Seed
             {
                 Title = "Who is the most Beautiful?",
                 TopicDescription = "Choose the most beautiful among these choices",
-                IsCompleted = false,
-                IsMultiVote = false,
+
                 CreatedAt = DateTime.UtcNow,
                 Options = [
                     new Option {

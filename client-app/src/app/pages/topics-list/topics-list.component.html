@@ -18,7 +18,11 @@
     </div>
     <div class="w-full md:w-[750px] flex flex-col gap-10">
       <ng-container *ngIf="data$ | async as data">
-        <app-topic *ngFor="let topic of data.topics" [topic]="topic">
+        <app-topic
+          *ngFor="let topic of data.topics; trackBy: trackByFn"
+          [topic]="topic"
+          [currentUser]="data.currentUser"
+        >
         </app-topic>
 
         <app-card-skeleton *ngIf="data.isLoading"></app-card-skeleton>
