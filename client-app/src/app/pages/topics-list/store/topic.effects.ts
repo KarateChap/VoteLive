@@ -11,8 +11,7 @@ import { Router } from '@angular/router';
 export const getTopicEffect = createEffect(
   (
     actions$ = inject(Actions),
-    topicListService = inject(TopicsListService),
-    toastService = inject(ToastService)
+    topicListService = inject(TopicsListService)
   ) => {
     return actions$.pipe(
       ofType(topicActions.getTopics),
@@ -22,11 +21,6 @@ export const getTopicEffect = createEffect(
             return topicActions.getTopicsSuccess({ topics });
           }),
           catchError(() => {
-            toastService.fireToast(
-              'danger',
-              'Error',
-              'An error occured while fetching the topics.'
-            );
             return of(topicActions.getTopicsFailure());
           })
         );
@@ -57,11 +51,6 @@ export const createTopicEffect = createEffect(
             return topicActions.createTopicSuccess({ topic: newTopic });
           }),
           catchError((error) => {
-            toastService.fireToast(
-              'danger',
-              'Error',
-              'An error occured while adding a new topic.'
-            );
             return of(topicActions.createTopicFailure());
           })
         );
@@ -92,11 +81,6 @@ export const updateTopicEffect = createEffect(
             return topicActions.updateTopicSuccess({ topic });
           }),
           catchError((error) => {
-            toastService.fireToast(
-              'danger',
-              'Error',
-              'An error occured while adding a new topic.'
-            );
             return of(topicActions.updateTopicFailure());
           })
         );
@@ -127,11 +111,6 @@ export const deleteTopicEffect = createEffect(
             return topicActions.deleteTopicSuccess({ id });
           }),
           catchError((error) => {
-            toastService.fireToast(
-              'danger',
-              'Error',
-              'An error occured while deleting a new topic.'
-            );
             return of(topicActions.deleteTopicFailure());
           })
         );

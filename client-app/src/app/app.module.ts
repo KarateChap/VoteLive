@@ -3,14 +3,9 @@ import { AppComponent } from './app.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimeNgModule } from './shared/modules/primeng.module';
-import {
-  HTTP_INTERCEPTORS,
-  HttpClientModule,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HeaderComponent } from './layout/header/header.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AuthComponent } from './pages/auth/auth.component';
@@ -22,9 +17,12 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { routerReducer } from '@ngrx/router-store';
 import * as topicEffects from './pages/topics-list/store/topic.effects';
 import * as commonEffects from './shared/common-store/common.effects';
+import * as authEffects from './pages/auth/store/auth.effects';
 import { topicReducer } from './pages/topics-list/store/topic.reducers';
 import { errorInterceptor } from './shared/interceptors/error.interceptor';
 import { commonReducer } from './shared/common-store/common.reducers';
+import { authReducer } from './pages/auth/store/auth.reducers';
+import { authInterceptor } from './shared/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, LayoutComponent, AuthComponent],
@@ -35,12 +33,14 @@ import { commonReducer } from './shared/common-store/common.reducers';
     AppRoutingModule,
     PrimeNgModule,
     FormsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({
       routerReducer,
       topic: topicReducer,
       common: commonReducer,
+      auth: authReducer,
     }),
-    EffectsModule.forRoot([topicEffects, commonEffects]),
+    EffectsModule.forRoot([topicEffects, commonEffects, authEffects]),
     StoreRouterConnectingModule.forRoot(),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
@@ -51,6 +51,8 @@ import { commonReducer } from './shared/common-store/common.reducers';
     }),
   ],
   bootstrap: [AppComponent],
-  providers: [provideHttpClient(withInterceptors([errorInterceptor]))],
+  providers: [
+    provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+  ],
 })
 export class AppModule {}

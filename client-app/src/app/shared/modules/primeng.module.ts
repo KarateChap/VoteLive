@@ -35,6 +35,8 @@ import { StepperModule } from 'primeng/stepper';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   exports: [
@@ -73,7 +75,8 @@ import { SkeletonModule } from 'primeng/skeleton';
     ToggleButtonModule,
     InputSwitchModule,
     SkeletonModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService, DialogService],
+  providers: [MessageService, DialogService, ConfirmationService],
 })
 export class PrimeNgModule {}

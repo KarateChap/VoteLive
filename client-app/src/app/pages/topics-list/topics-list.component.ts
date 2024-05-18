@@ -15,6 +15,7 @@ import { ModalService } from '../../shared/services/modal.service';
 })
 export class TopicsListComponent implements OnInit {
   ref: DynamicDialogRef | undefined;
+  isTopicRequest = false;
 
   data$ = combineLatest({
     isLoading: this.store.select(selectIsLoading),
@@ -29,8 +30,12 @@ export class TopicsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.data$.subscribe(({ topics }) => {
-      if (!topics || topics.length <= 1) {
+      // if (!topics || topics.length <= 1) {
+      //   this.getTopics();
+      // }
+      if (topics === null && this.isTopicRequest === false) {
         this.getTopics();
+        this.isTopicRequest = true;
       }
     });
   }

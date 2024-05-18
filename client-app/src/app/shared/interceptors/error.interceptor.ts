@@ -25,24 +25,47 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
               }
               throw modelStateErrors.flat();
             } else {
-              toastService.fireToast('error', 'Error', 'Bad request');
+              toastService.fireToast(
+                'error',
+                'Error',
+                getErrorMessage(error, 'Bad request')
+              );
             }
             break;
           case 401:
-            toastService.fireToast('error', 'Error', 'Unauthorised');
+            toastService.fireToast(
+              'error',
+              'Unauthorised',
+              getErrorMessage(
+                error,
+                'You are not allowed to access this application'
+              )
+            );
             break;
           case 403:
-            toastService.fireToast('error', 'Error', 'Forbidden');
+            toastService.fireToast(
+              'error',
+              'Error',
+              getErrorMessage(error, 'Forbidden')
+            );
             break;
           case 404:
-            toastService.fireToast('error', 'Error', 'Not found');
+            toastService.fireToast(
+              'error',
+              'Error',
+              getErrorMessage(error, 'Not found')
+            );
             router.navigateByUrl('test-errors/not-found');
             break;
           case 500:
             store.dispatch(
               commonActions.setServerError({ error: error.error })
             );
-            toastService.fireToast('error', 'Error', 'Server error');
+            toastService.fireToast(
+              'error',
+              'Error',
+              getErrorMessage(error, 'Server error')
+            );
             router.navigateByUrl('test-errors/server-error');
             break;
           default:
@@ -52,4 +75,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       throw error;
     })
   );
+};
+
+const getErrorMessage = (error: any, errorMessage: string) => {
+  return (typeof error.error === 'object' && error.error !== null) ||
+    error.error === '' ||
+    typeof error.error === 'object'
+    ? errorMessage
+    : error.error;
 };

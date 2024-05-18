@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
+import { authActions } from '../../pages/auth/store/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +13,7 @@ export class HeaderComponent implements OnInit {
   items: MenuItem[] | undefined;
   menuItems: MenuItem[] | undefined;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private store: Store) {}
 
   ngOnInit() {
     this.items = [
@@ -58,7 +60,7 @@ export class HeaderComponent implements OnInit {
 
   onMenuClicked(option: string) {
     if (option === 'Logout') {
-      this.router.navigateByUrl('/');
+      this.store.dispatch(authActions.logout());
     } else {
     }
   }

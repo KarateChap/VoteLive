@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Topic } from '../types/topic.interface';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ManageTopicComponent } from '../manage-topic/manage-topic.component';
@@ -32,7 +32,8 @@ export class TopicDetailComponent implements OnInit {
     private route: ActivatedRoute,
     public dialogService: DialogService,
     private modalService: ModalService,
-    private store: Store
+    private store: Store,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +51,10 @@ export class TopicDetailComponent implements OnInit {
     ];
 
     this.breadCrumbItems = [{ label: 'Topic Details' }];
-    this.home = { icon: 'pi pi-home', routerLink: '/app/topics-list' };
+    this.home = {
+      icon: 'pi pi-home',
+      routerLink: '/app/topics-list',
+    };
 
     this.route.params.subscribe((params: Params) => {
       this.topicId = params['id'];
@@ -78,8 +82,22 @@ export class TopicDetailComponent implements OnInit {
 
       this.modalService.setModalRef(this.ref);
     } else {
-      if (this.topicId)
-        this.store.dispatch(topicActions.deleteTopic({ id: this.topicId }));
+      this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: 'Do you want to delete this record?',
+        header: 'Delete Confirmation',
+        icon: 'pi pi-info-circle',
+        acceptButtonStyleClass: 'p-button-danger p-button-text',
+        rejectButtonStyleClass: 'p-button-text p-button-text',
+        acceptIcon: 'none',
+        rejectIcon: 'none',
+
+        accept: () => {
+          if (this.topicId)
+            this.store.dispatch(topicActions.deleteTopic({ id: this.topicId }));
+        },
+        reject: () => {},
+      });
     }
   }
 }

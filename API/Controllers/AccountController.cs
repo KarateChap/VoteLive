@@ -29,7 +29,7 @@ public class AccountController : ControllerBase
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-        if (user == null) return Unauthorized();
+        if (user == null) return Unauthorized("Invalid Email or Password.");
 
         var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
@@ -38,14 +38,14 @@ public class AccountController : ControllerBase
             return CreateUserObject(user);
         }
 
-        return Unauthorized();
+        return Unauthorized("Invalid Email or Password.");
     }
 
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
-        if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
+        if (await _userManager.Users.AnyAsync(x => x.UserName.ToLower() == registerDto.Username.ToLower()))
         {
             return BadRequest("Username is already taken");
         }

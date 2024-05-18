@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './pages/auth/auth.component';
 import { LayoutComponent } from './layout/layout.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,6 +20,8 @@ const routes: Routes = [
   {
     path: 'app',
     component: LayoutComponent,
+    runGuardsAndResolvers: 'always',
+    canActivate: [AuthGuard],
     children: [
       {
         path: 'topics-list',

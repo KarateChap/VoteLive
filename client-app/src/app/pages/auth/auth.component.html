@@ -2,26 +2,71 @@
   class="flex justify-center items-center w-full h-[100vh] bg-[url('/assets/subtle-prism.svg')] px-4"
 >
   <div class="card flex justify-content-center">
-    <p-card styleClass="px-7 relative">
+    <p-card styleClass="px-10 relative">
       <!-- <img
         src="../../../assets/vote-live.png"
         class="absolute w-[120px] top-[-37px] right-[-0px] shadow-sm"
       /> -->
-      <h2>Log in</h2>
-      <p>Please enter your details</p>
+      <h2>{{ isRegister ? "Register" : "Log in" }}</h2>
+      <p>
+        {{
+          isRegister
+            ? "Fill up the form to register"
+            : "Please enter your details"
+        }}
+      </p>
 
-      <div class="flex flex-col gap-5">
+      <form
+        [formGroup]="authForm"
+        (ngSubmit)="onSubmit()"
+        class="flex flex-col gap-5"
+      >
         <div class="flex flex-col gap-5">
+          <input
+            *ngIf="isRegister"
+            type="text"
+            pInputText
+            id="username"
+            formControlName="username"
+            placeholder="Username"
+          />
+          <input
+            *ngIf="isRegister"
+            type="text"
+            pInputText
+            id="firstName"
+            formControlName="firstName"
+            placeholder="First Name"
+          />
+          <input
+            *ngIf="isRegister"
+            type="text"
+            pInputText
+            id="lastName"
+            formControlName="lastName"
+            placeholder="Last Name"
+          />
           <input
             type="text"
             pInputText
-            [(ngModel)]="email"
+            id="email"
+            formControlName="email"
             placeholder="Email"
           />
           <p-password
-            [(ngModel)]="password"
+            *ngIf="!isRegister"
+            id="password"
+            formControlName="password"
+            placeholder="Password"
+            [feedback]="false"
+            [toggleMask]="true"
+          />
+          <p-password
+            id="password"
+            formControlName="password"
             [toggleMask]="true"
             placeholder="Password"
+            *ngIf="isRegister"
           >
             <ng-template pTemplate="header">
               <h6>Pick a password</h6>
@@ -37,19 +82,33 @@
               </ul>
             </ng-template>
           </p-password>
+          <p-password
+            *ngIf="isRegister"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirm Password"
+            [feedback]="false"
+            [toggleMask]="true"
+          />
         </div>
-        <div class="flex justify-between gap-6">
-          <div class="w-full">
+        <div class="flex justify-between items-center gap-6">
+          <div class="flex-[3]">
             <p-button
-              label="Log In"
+              [label]="isRegister ? 'Register' : 'Log in'"
               size="small"
               styleClass="w-full"
-              routerLink="/app/topics-list"
+              type="submit"
+              [disabled]="!authForm.valid || !authForm.touched"
             />
           </div>
-          <p class="text-sm hover:text-[#3b82f6] cursor-pointer">Register</p>
+          <p
+            class="text-sm hover:text-[#3b82f6] cursor-pointer flex-[1]"
+            (click)="toggleRegisterLogin()"
+          >
+            {{ isRegister ? "Log in" : "Register" }}
+          </p>
         </div>
-      </div>
+      </form>
     </p-card>
   </div>
 </div>
