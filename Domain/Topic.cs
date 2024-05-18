@@ -9,4 +9,6 @@ public class Topic
     public bool IsMultiVote { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<Option> Options { get; set; }
+    public AppUser AppUser { get; set; }
+
 }

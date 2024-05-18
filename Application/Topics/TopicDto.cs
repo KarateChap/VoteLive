@@ -1,4 +1,5 @@
 ﻿using Application.Options;
+using Application.Users;
 
 namespace Application.Topics;
 
@@ -11,4 +12,6 @@ public class TopicDto
     public bool IsMultiVote { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<OptionDto> Options { get; set; }
+    public UserDto Creator { get; set; }
 }
+

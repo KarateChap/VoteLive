@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[AllowAnonymous]
 public class TopicsController : BaseApiController
 {
     [HttpGet]
@@ -29,6 +28,7 @@ public class TopicsController : BaseApiController
         return HandleResult(await Mediator.Send(new Create.Command { Topic = topic }));
     }
 
+    [Authorize(Policy = "IsTopicOwner")]
     [HttpPut("{id}")]
     public async Task<IActionResult> EditTopic(Guid id, Topic topic)
     {
@@ -37,9 +37,17 @@ public class TopicsController : BaseApiController
         return HandleResult(await Mediator.Send(new Edit.Command { Topic = topic }));
     }
 
+    [Authorize(Policy = "IsTopicOwner")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTopic(Guid id)
     {
         return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+    }
+
+
+    [HttpPost("{id}/update-vote")]
+    public async Task<IActionResult> UpdateVote(Guid id)
+    {
+        return HandleResult(await Mediator.Send(new UpdateVote.Command { Id = id }));
     }
 }

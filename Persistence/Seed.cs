@@ -21,11 +21,10 @@ public class Seed
             {
                 await userManager.CreateAsync(user, "Pa$$w0rd");
             }
-        }
 
-        if (context.Topics.Any()) return;
+            if (context.Topics.Any()) return;
 
-        var topics = new List<Topic>
+            var topics = new List<Topic>
         {
             new Topic
             {
@@ -44,7 +43,8 @@ public class Seed
                      new Option {
                     OptionDescription = "Jose Rizal"
                     }
-                ]
+                ],
+                AppUser = users[0]
             },
             new Topic
             {
@@ -63,11 +63,14 @@ public class Seed
                      new Option {
                     OptionDescription = "Nikky Minadge"
                     }
-                ]
+                ],
+                AppUser = users[1]
             }
-        };
 
-        await context.Topics.AddRangeAsync(topics);
+        };
+            await context.Topics.AddRangeAsync(topics);
+        }
+
         await context.SaveChangesAsync();
     }
 }
