@@ -23,15 +23,15 @@ export class HeaderComponent implements OnInit {
         command: (event: any) => this.onNavClicked(event.item.label),
       },
       {
-        label: 'Guide',
+        label: 'Docs',
         icon: 'pi pi-book',
         command: (event: any) => this.onNavClicked(event.item.label),
       },
-      {
-        label: 'Test Errors',
-        icon: 'pi pi-times-circle',
-        command: (event: any) => this.onNavClicked(event.item.label),
-      },
+      // {
+      //   label: 'Test Errors',
+      //   icon: 'pi pi-times-circle',
+      //   command: (event: any) => this.onNavClicked(event.item.label),
+      // },
     ];
 
     this.menuItems = [
@@ -51,8 +51,11 @@ export class HeaderComponent implements OnInit {
   onNavClicked(option: string) {
     if (option === 'Home') {
       this.router.navigateByUrl('/app/topics-list');
-    } else if (option === 'Guide') {
-      this.router.navigateByUrl('/app/topics-list');
+    } else if (option === 'Docs') {
+      window.open(
+        'https://ralphs-personal-organization.gitbook.io/vote-live/',
+        '_blank'
+      );
     } else {
       this.router.navigateByUrl('/test-errors');
     }

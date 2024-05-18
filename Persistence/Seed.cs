@@ -12,7 +12,7 @@ public class Seed
         {
             var users = new List<AppUser>
             {
-                new AppUser{UserName = "Bob", FirstName = "Bob", LastName = "Builder", Email = "bob@test.com", ImageUrl = ""},
+                new AppUser{UserName = "Bob", FirstName = "Bobby", LastName = "Fischer", Email = "bob@test.com", ImageUrl = ""},
                 new AppUser{UserName = "Tom", FirstName = "Tom", LastName = "Felter", Email = "tom@test.com", ImageUrl = ""},
                 new AppUser{UserName = "Jane", FirstName = "Jane", LastName = "Doe", Email = "jane@test.com", ImageUrl = ""},
             };
@@ -28,41 +28,60 @@ public class Seed
         {
             new Topic
             {
-                Title = "Who is the most handsome?",
-                TopicDescription = "Choose the most handsome among these choices",
+                Title = "Preferred Mode of Commute",
+                TopicDescription = "We are conducting a survey to understand the preferred modes of commute among our employees. Your input will help us plan better transportation facilities.",
 
                 CreatedAt = DateTime.UtcNow,
                 Options = [
                     new Option {
-                    OptionDescription = "Ralph Gabriel Mariano",
+                    OptionDescription = "Public Transport (Bus/Train)",
                     },
                     new Option {
-                    OptionDescription = "Johhny Bravo"
+                    OptionDescription = "Personal Vehicle (Car/Bike)"
                     },
                      new Option {
-                    OptionDescription = "Jose Rizal"
+                    OptionDescription = "Bicycle/Walking"
                     }
                 ],
                 AppUser = users[0]
             },
             new Topic
             {
-                Title = "Who is the most Beautiful?",
-                TopicDescription = "Choose the most beautiful among these choices",
+                Title = "Favorite Genre of Music",
+                TopicDescription = "Music is a big part of our lives, and we want to know what genre resonates most with you. Please select your favorite type of music.",
 
                 CreatedAt = DateTime.UtcNow,
                 Options = [
                     new Option {
-                    OptionDescription = "Ada Lovelace",
+                    OptionDescription = "Pop/Rock",
                     },
                     new Option {
-                    OptionDescription = "Mel Tiangco"
+                    OptionDescription = "Classical/Jazz"
                     },
                      new Option {
-                    OptionDescription = "Nikky Minadge"
+                    OptionDescription = "Hip-Hop/Rap"
                     }
                 ],
                 AppUser = users[1]
+            },
+            new Topic
+            {
+                Title = "Preferred Work Environment",
+                TopicDescription = "We are looking to improve our office environment and would love to know your preference for the ideal work setting.",
+
+                CreatedAt = DateTime.UtcNow,
+                Options = [
+                    new Option {
+                    OptionDescription = "Open-plan Officek",
+                    },
+                    new Option {
+                    OptionDescription = "Private Office"
+                    },
+                     new Option {
+                    OptionDescription = "Remote Work"
+                    }
+                ],
+                AppUser = users[2]
             }
 
         };
