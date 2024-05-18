@@ -2,6 +2,7 @@
 using Application.Core;
 using Application.Topics;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 

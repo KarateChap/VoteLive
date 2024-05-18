@@ -1,8 +1,7 @@
 import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { commonActions } from './common.action';
-import { catchError, of, tap } from 'rxjs';
-import { ServerError } from '../types/server-error.interface';
+import { tap } from 'rxjs';
 
 export const setServerError = createEffect(
   (actions$ = inject(Actions)) =>

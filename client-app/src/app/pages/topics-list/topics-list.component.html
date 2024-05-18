@@ -16,7 +16,7 @@
         />
       </div>
     </div>
-    <div class="w-full md:w-[750px] flex flex-col gap-5">
+    <div class="w-full md:w-[750px] flex flex-col gap-10">
       <ng-container *ngIf="data$ | async as data">
         <app-topic *ngFor="let topic of data.topics" [topic]="topic">
         </app-topic>
