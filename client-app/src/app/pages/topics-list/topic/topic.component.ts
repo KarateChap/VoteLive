@@ -26,6 +26,8 @@ export class TopicComponent implements OnInit {
   selectedCategory: Category | null = null;
   initialSelectedVote: Category | null = null;
 
+  isVoteSubmitting = false;
+
   categories: Category[] = [
     { name: 'Accounting', key: 'A' },
     { name: 'Marketing', key: 'M' },
@@ -50,6 +52,14 @@ export class TopicComponent implements OnInit {
         icon: 'pi pi-times',
       },
     ];
+
+    this.store.select(selectIsSubmitting).subscribe({
+      next: (isSubmitting) => {
+        if (isSubmitting === false) {
+          this.isVoteSubmitting = isSubmitting;
+        }
+      },
+    });
   }
 
   private initializeRadioButtons() {
@@ -88,6 +98,7 @@ export class TopicComponent implements OnInit {
   }
 
   submitVote() {
+    this.isVoteSubmitting = true;
     if (
       this.topic &&
       this.selectedCategory &&

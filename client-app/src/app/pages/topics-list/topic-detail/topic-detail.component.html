@@ -40,7 +40,6 @@
                 </div>
                 <span class="p-text-secondary">
                   {{ utilityService.getTotalVoteCounts(topic.options) }} votes
-                  votes
                 </span>
               </div>
             </ng-template>
@@ -104,52 +103,30 @@
         </div>
 
         <div class="w-full flex flex-col py-5">
-          <div class="flex flex-col gap-4">
-            <p-fieldset>
-              <ng-template pTemplate="header">
-                <div class="flex items-center gap-2 px-2">
-                  <p-avatar [image]="'/assets/user-dummy.jpg'" shape="circle" />
-                  <div class="flex flex-col">
-                    <span class="font-bold">Jason Iris</span>
-                    <span class="text-sm font-medium text-gray-500"
-                      >03 May 2024</span
-                    >
-                  </div>
-                </div>
-              </ng-template>
-              <p class="m-0">
-                I found this topic very informative and well-written. The tips
-                on improving productivity are practical and easy to implement.
-                Looking forward to reading more from you
-              </p>
-            </p-fieldset>
-
-            <p-fieldset>
-              <ng-template pTemplate="header">
-                <div class="flex items-center gap-2 px-2">
-                  <p-avatar [image]="'/assets/user-dummy.jpg'" shape="circle" />
-                  <div class="flex flex-col">
-                    <span class="font-bold">Melby Pad</span>
-                    <span class="text-sm font-medium text-gray-500"
-                      >03 May 2024</span
-                    >
-                  </div>
-                </div>
-              </ng-template>
-              <p class="m-0">
-                This was a fantastic read! I appreciate the votes from the
-                audiences. The options provided really helped me with my
-                decisions.
-              </p>
-            </p-fieldset>
-          </div>
-
           <h3>Post a Comment</h3>
           <div class="flex flex-col gap-4">
-            <textarea rows="5" cols="30" pInputTextarea></textarea>
+            <textarea
+              rows="5"
+              cols="30"
+              pInputTextarea
+              [(ngModel)]="comment"
+            ></textarea>
             <div class="flex w-full justify-end">
-              <p-button label="Post Comment" size="small" plain="true" />
+              <p-button
+                label="Post Comment"
+                size="small"
+                plain="true"
+                (onClick)="postComment()"
+                [disabled]="comment.length === 0"
+              />
             </div>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <app-comment
+              *ngFor="let userComment of data.userComments"
+              [comment]="userComment"
+            ></app-comment>
           </div>
         </div>
       </div></div

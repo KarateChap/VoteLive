@@ -28,6 +28,7 @@
               icon="pi pi-check"
               size="small"
               [disabled]="!selectedCategory"
+              [loading]="isVoteSubmitting"
               (click)="submitVote()"
             />
             <p-button

@@ -14,15 +14,17 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { routerReducer } from '@ngrx/router-store';
+import { errorInterceptor } from './shared/interceptors/error.interceptor';
+import { authInterceptor } from './shared/interceptors/auth.interceptor';
 import * as topicEffects from './pages/topics-list/store/topic.effects';
 import * as commonEffects from './shared/common-store/common.effects';
 import * as authEffects from './pages/auth/store/auth.effects';
+import * as commentEffects from './pages/topics-list/topic-detail/comments/store/comment.effects';
+import { routerReducer } from '@ngrx/router-store';
 import { topicReducer } from './pages/topics-list/store/topic.reducers';
-import { errorInterceptor } from './shared/interceptors/error.interceptor';
 import { commonReducer } from './shared/common-store/common.reducers';
 import { authReducer } from './pages/auth/store/auth.reducers';
-import { authInterceptor } from './shared/interceptors/auth.interceptor';
+import { commentReducer } from './pages/topics-list/topic-detail/comments/store/comment.reducers';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, LayoutComponent, AuthComponent],
@@ -39,8 +41,14 @@ import { authInterceptor } from './shared/interceptors/auth.interceptor';
       topic: topicReducer,
       common: commonReducer,
       auth: authReducer,
+      comment: commentReducer,
     }),
-    EffectsModule.forRoot([topicEffects, commonEffects, authEffects]),
+    EffectsModule.forRoot([
+      topicEffects,
+      commonEffects,
+      authEffects,
+      commentEffects,
+    ]),
     StoreRouterConnectingModule.forRoot(),
     StoreDevtoolsModule.instrument({
       maxAge: 25,

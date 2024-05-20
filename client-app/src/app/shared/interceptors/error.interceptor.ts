@@ -41,6 +41,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
                 'You are not allowed to access this application'
               )
             );
+            router.navigate(['']);
             break;
           case 403:
             toastService.fireToast(

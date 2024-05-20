@@ -12,7 +12,7 @@ export class PersistenceService {
     }
   }
 
-  get(key: string): unknown {
+  get(key: string): null {
     try {
       const localStorageItem = localStorage.getItem(key);
       return localStorageItem ? JSON.parse(localStorageItem) : null;

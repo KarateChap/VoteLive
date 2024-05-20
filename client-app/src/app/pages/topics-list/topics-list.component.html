@@ -25,7 +25,9 @@
         >
         </app-topic>
 
-        <app-card-skeleton *ngIf="data.isLoading"></app-card-skeleton>
+        <ng-container *ngIf="data.isLoading">
+          <app-card-skeleton *ngFor="let i of [1, 2, 3, 4]"></app-card-skeleton>
+        </ng-container>
       </ng-container>
     </div>
   </div>

@@ -169,7 +169,7 @@ export const updateVoteEffect = createEffect(
             toastService.fireToast(
               'success',
               'Success',
-              'The vote successfully submitted.'
+              'Vote successfully submitted.'
             );
 
             return topicActions.updateVoteSuccess({ updateVote, currentUser });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Topic } from '../types/topic.interface';
@@ -13,26 +13,32 @@ import { UtilityService } from '../../../shared/services/utility.service';
 import { Option } from '../types/option.interface';
 import { selectCurrentUser } from '../../auth/store/auth.reducers';
 import { User } from '../../auth/types/user.interface';
+import { commentActions } from './comments/store/comment.action';
+import { SignalRService } from '../../../shared/services/signalr.service';
+import { selectComments } from './comments/store/comment.reducers';
 
 @Component({
   selector: 'app-topic-detail',
   templateUrl: './topic-detail.component.html',
   styleUrl: './topic-detail.component.scss',
 })
-export class TopicDetailComponent implements OnInit {
+export class TopicDetailComponent implements OnInit, OnDestroy {
   topic: Topic | null = null;
   items: MenuItem[] | undefined;
   breadCrumbItems: MenuItem[] | undefined;
   home: MenuItem | undefined;
   topicId: string | null = null;
   ref: DynamicDialogRef | undefined;
+  comment = '';
 
   data$ = combineLatest({
     isLoading: this.store.select(selectIsLoading),
     selectedTopic: this.store.select(selectSelectedTopic),
+    userComments: this.store.select(selectComments),
   });
 
   currentUser$ = this.store.select(selectCurrentUser);
+  isSignalRConnectionInitialized = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,7 +46,8 @@ export class TopicDetailComponent implements OnInit {
     private modalService: ModalService,
     private store: Store,
     private confirmationService: ConfirmationService,
-    public utilityService: UtilityService
+    public utilityService: UtilityService,
+    private signalRService: SignalRService
   ) {}
 
   ngOnInit(): void {
@@ -69,13 +76,25 @@ export class TopicDetailComponent implements OnInit {
 
     this.data$.subscribe((data) => {
       this.topic = data.selectedTopic;
-      console.log(this.topic);
-      if (this.topic == null && this.topicId) this.getTopic(this.topicId);
+      if (this.topic == null && this.topicId) {
+        this.getTopic(this.topicId);
+      }
+
+      if (this.topic && this.topic.id && !this.isSignalRConnectionInitialized) {
+        this.createSignalRConnection(this.topic.id);
+        this.isSignalRConnectionInitialized = true;
+      }
     });
   }
 
   getTopic(id: string) {
     this.store.dispatch(topicActions.getCurrentTopic({ id }));
+  }
+
+  createSignalRConnection(topicId: string) {
+    this.signalRService.startConnection('topicId', topicId);
+    this.signalRService.loadComments();
+    this.signalRService.receiveComment();
   }
 
   editOrDelete(event: any) {
@@ -123,5 +142,21 @@ export class TopicDetailComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  postComment() {
+    if (this.topic && this.topic.id) {
+      const commentPayload = {
+        body: this.comment,
+        topicId: this.topic.id,
+      };
+      this.signalRService.postComment(commentPayload);
+      this.comment = '';
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.signalRService.stopConnection();
+    this.store.dispatch(commentActions.clearComments());
   }
 }
