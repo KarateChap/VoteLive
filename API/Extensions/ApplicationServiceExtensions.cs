@@ -26,7 +26,7 @@ public static class ApplicationServiceExtensions
         {
             opt.AddPolicy("CorsPolicy", policy =>
             {
-                policy.AllowAnyHeader().AllowAnyMethod().WithOrigins(config.GetSection("AppSettings:FrontendUrl").Value);
+                policy.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins(config.GetSection("AppSettings:FrontendUrl").Value);
             });
         });
 
@@ -36,6 +36,8 @@ public static class ApplicationServiceExtensions
         services.AddValidatorsFromAssemblyContaining<Create>();
         services.AddHttpContextAccessor();
         services.AddScoped<IUserAccessor, UserAccessor>();
+        services.AddSignalR();
+
 
         return services;
     }

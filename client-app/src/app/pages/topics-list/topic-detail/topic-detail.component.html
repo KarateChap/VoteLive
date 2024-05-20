@@ -29,7 +29,12 @@
                 <div class="flex items-center gap-2">
                   <span>Comments </span>
                   <p-avatar
-                    label="2"
+                    *ngIf="data.userComments"
+                    [label]="
+                      data.userComments.length.toString()
+                        ? data.userComments.length.toString()
+                        : '0'
+                    "
                     styleClass="mr-2"
                     [style]="{
                       'background-color': '#dee9fc',

@@ -1,8 +1,7 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { Topic } from '../types/topic.interface';
-import { DynamicDialogRef } from 'primeng/dynamicdialog';
-import { UpdateVote } from '../types/update-vote';
 import { User } from '../../auth/types/user.interface';
+import { VotePayload } from '../types/vote-payload.interface';
 
 export const topicActions = createActionGroup({
   source: 'topic',
@@ -23,16 +22,15 @@ export const topicActions = createActionGroup({
     'Delete topic success': props<{ id: string }>(),
     'Delete topic failure': emptyProps(),
 
-    'Get current topic': props<{ id: string }>(),
+    'Get current topic': props<{ topic: Topic }>(),
     'Get current topic success': props<{ topic: Topic }>(),
-    'Get current topic failure': emptyProps(),
 
     'Set current topic': props<{ topic: Topic }>(),
     'Set current topic success': props<{ topic: Topic }>(),
 
-    'Update vote': props<{ updateVote: UpdateVote; currentUser: User }>(),
+    'Update vote': props<{ votePayload: VotePayload; currentUser: User }>(),
     'Update vote success': props<{
-      updateVote: UpdateVote;
+      votePayload: VotePayload;
       currentUser: User;
     }>(),
     'Update vote failure': emptyProps(),

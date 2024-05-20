@@ -1,33 +1,40 @@
 ﻿using Application.Core;
 using Application.Interfaces;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application;
+namespace Application.Topics;
 
 public class UpdateVote
 {
-    public class Command : IRequest<Result<Unit>>
+    public class Command : IRequest<Result<TopicDto>>
     {
         public Guid OptionId { get; set; }
         public Guid TopicId { get; set; }
     }
 
-    public class Handler : IRequestHandler<Command, Result<Unit>>
+    public class Handler : IRequestHandler<Command, Result<TopicDto>>
     {
         private readonly DataContext _context;
         private readonly IUserAccessor _userAccessor;
+        private readonly IMapper _mapper;
 
-        public Handler(DataContext context, IUserAccessor userAccessor)
+        public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper)
         {
             _context = context;
             _userAccessor = userAccessor;
+            _mapper = mapper;
         }
 
-        public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Result<TopicDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x =>
+            var userAccessors = _userAccessor.GetUsername();
+
+            var user = await _context.Users.SingleOrDefaultAsync(x =>
                 x.UserName == _userAccessor.GetUsername());
 
             if (user == null) return null;
@@ -60,12 +67,14 @@ public class UpdateVote
                 AppUser = user,
                 Option = selectedOption,
             };
+
             selectedOption.Voters.Add(newVote);
 
+            await _context.SaveChangesAsync();
 
-            var result = await _context.SaveChangesAsync() > 0;
-
-            return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem updating vote");
+            return Result<TopicDto>.Success(await _context.Topics
+                .ProjectTo<TopicDto>(_mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(x => x.Id == request.TopicId));
         }
     }
 }

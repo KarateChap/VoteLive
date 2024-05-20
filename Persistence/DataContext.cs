@@ -13,6 +13,7 @@ public class DataContext : IdentityDbContext<AppUser>
     public DbSet<Topic> Topics { get; set; }
     public DbSet<Option> Options { get; set; }
     public DbSet<UserOption> UserOptions { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -35,5 +36,15 @@ public class DataContext : IdentityDbContext<AppUser>
             .HasOne(u => u.Option)
             .WithMany(o => o.Voters)
             .HasForeignKey(uo => uo.OptionId);
+
+        builder.Entity<Comment>()
+            .HasOne(t => t.Topic)
+            .WithMany(c => c.Comments)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<Comment>()
+            .HasOne(a => a.Author)
+            .WithMany(c => c.Comments)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

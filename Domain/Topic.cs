@@ -8,5 +8,5 @@ public class Topic
     public DateTime CreatedAt { get; set; }
     public List<Option> Options { get; set; }
     public AppUser AppUser { get; set; }
-
+    public List<Comment> Comments { get; set; } = new List<Comment>();
 }

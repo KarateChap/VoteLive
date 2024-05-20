@@ -82,11 +82,6 @@ const topicFeature = createFeature({
       selectedTopic: action.topic,
       isLoading: false,
     })),
-    on(topicActions.getCurrentTopicFailure, (state) => ({
-      ...state,
-      selectedTopic: null,
-      isLoading: false,
-    })),
     //set current topic
     on(topicActions.setCurrentTopic, (state) => ({
       ...state,
@@ -107,11 +102,11 @@ const topicFeature = createFeature({
       ...state,
       isSubmitting: false,
       topics: (state.topics || []).map((topic) =>
-        topic.id === action.updateVote.topicId
+        topic.id === action.votePayload.topicId
           ? {
               ...topic,
               options: (topic.options || []).map((option) =>
-                option.id === action.updateVote.optionId
+                option.id === action.votePayload.optionId
                   ? {
                       ...option,
                       voters: [

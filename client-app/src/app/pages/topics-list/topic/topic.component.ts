@@ -6,8 +6,9 @@ import { topicActions } from '../store/topic.actions';
 import { Option } from '../types/option.interface';
 import { UtilityService } from '../../../shared/services/utility.service';
 import { User } from '../../auth/types/user.interface';
-import { UpdateVote } from '../types/update-vote';
 import { selectIsSubmitting } from '../store/topic.reducers';
+import { SignalRService } from '../../../shared/services/signalr.service';
+import { VotePayload } from '../types/vote-payload.interface';
 
 interface Category {
   name: string;
@@ -37,7 +38,12 @@ export class TopicComponent implements OnInit {
 
   items: { label?: string; icon?: string; separator?: boolean }[] = [];
 
-  constructor(private store: Store, public utilityService: UtilityService) {}
+  constructor(
+    private store: Store,
+    public utilityService: UtilityService,
+    private signalRService: SignalRService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.initializeRadioButtons();
@@ -60,6 +66,12 @@ export class TopicComponent implements OnInit {
         }
       },
     });
+  }
+
+  createSignalRVoteConnection(topicId: string) {
+    this.signalRService.startConnection('topicId', 'vote', topicId);
+    this.signalRService.loadTopic();
+    this.signalRService.receiveVote();
   }
 
   private initializeRadioButtons() {
@@ -105,14 +117,24 @@ export class TopicComponent implements OnInit {
       this.topic.id !== undefined &&
       this.currentUser
     ) {
-      const updateVote: UpdateVote = {
+      const votePayload: VotePayload = {
         topicId: this.topic.id,
         optionId: this.selectedCategory?.key,
       };
 
+      // this.signalRService.updateVote(votePayload);
+      // this.router.navigateByUrl(`/app/topics-list/${this.topic.id}`);
+
       this.store.dispatch(
-        topicActions.updateVote({ updateVote, currentUser: this.currentUser })
+        topicActions.updateVote({ votePayload, currentUser: this.currentUser })
       );
+    }
+  }
+
+  optionSelected() {
+    this.signalRService.stopConnection('vote');
+    if (this.topic && this.topic.id) {
+      this.createSignalRVoteConnection(this.topic.id);
     }
   }
 }

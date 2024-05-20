@@ -3,7 +3,6 @@ import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { Topic } from './types/topic.interface';
 import { HttpClient } from '@angular/common/http';
-import { UpdateVote } from './types/update-vote';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +32,7 @@ export class TopicsListService {
     return this.http.delete(`${this.baseUrl}api/topics/${id}`);
   }
 
-  updateVote(updateVote: UpdateVote) {
-    return this.http.post(`${this.baseUrl}api/topics/update-vote`, updateVote);
-  }
+  // updateVote(updateVote: UpdateVote) {
+  //   return this.http.post(`${this.baseUrl}api/topics/update-vote`, updateVote);
+  // }
 }

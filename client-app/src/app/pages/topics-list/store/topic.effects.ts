@@ -7,6 +7,7 @@ import { Topic } from '../types/topic.interface';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ModalService } from '../../../shared/services/modal.service';
 import { Router } from '@angular/router';
+import { SignalRService } from '../../../shared/services/signalr.service';
 
 export const getTopicEffect = createEffect(
   (
@@ -121,22 +122,10 @@ export const deleteTopicEffect = createEffect(
 );
 
 export const getCurrentTopicEffect = createEffect(
-  (
-    actions$ = inject(Actions),
-    topicListService = inject(TopicsListService)
-  ) => {
+  (actions$ = inject(Actions)) => {
     return actions$.pipe(
       ofType(topicActions.getCurrentTopic),
-      switchMap(({ id }) => {
-        return topicListService.getTopic(id).pipe(
-          map((topic: Topic) => {
-            return topicActions.getCurrentTopicSuccess({ topic });
-          }),
-          catchError((error) => {
-            return of(topicActions.getCurrentTopicFailure());
-          })
-        );
-      })
+      map(({ topic }) => topicActions.getCurrentTopicSuccess({ topic }))
     );
   },
   { functional: true }
@@ -158,27 +147,38 @@ export const setCurrentTopicEffect = createEffect(
 export const updateVoteEffect = createEffect(
   (
     actions$ = inject(Actions),
-    topicListService = inject(TopicsListService),
-    toastService = inject(ToastService)
+    toastService = inject(ToastService),
+    signalrService = inject(SignalRService)
   ) => {
     return actions$.pipe(
       ofType(topicActions.updateVote),
-      switchMap(({ updateVote, currentUser }) => {
-        return topicListService.updateVote(updateVote).pipe(
-          map(() => {
-            toastService.fireToast(
-              'success',
-              'Success',
-              'Vote successfully submitted.'
-            );
-
-            return topicActions.updateVoteSuccess({ updateVote, currentUser });
-          }),
-          catchError((error) => {
-            return of(topicActions.updateVoteFailure());
-          })
+      tap(({ votePayload, currentUser }) => {
+        signalrService.updateVote(votePayload);
+        toastService.fireToast(
+          'success',
+          'Success',
+          'Vote successfully submitted.'
         );
-      })
+      }),
+      map(({ votePayload, currentUser }) =>
+        topicActions.updateVoteSuccess({ votePayload, currentUser })
+      )
+      // switchMap(({ updateVote, currentUser }) => {
+      //   return topicListService.updateVote(updateVote).pipe(
+      //     map(() => {
+      //       toastService.fireToast(
+      //         'success',
+      //         'Success',
+      //         'Vote successfully submitted.'
+      //       );
+
+      //       return topicActions.updateVoteSuccess({ updateVote, currentUser });
+      //     }),
+      //     catchError((error) => {
+      //       return of(topicActions.updateVoteFailure());
+      //     })
+      //   );
+      // })
     );
   },
   { functional: true }

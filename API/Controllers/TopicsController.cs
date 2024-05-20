@@ -1,6 +1,4 @@
 ﻿using API.DTOs;
-using Application;
-using Application.Core;
 using Application.Topics;
 using Domain;
 using Microsoft.AspNetCore.Authorization;

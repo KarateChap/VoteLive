@@ -72,29 +72,27 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
 
     this.route.params.subscribe((params: Params) => {
       this.topicId = params['id'];
+      if (this.topicId) {
+        this.createSignalRChatConnection(this.topicId);
+        this.createSignalRVoteConnection(this.topicId);
+      }
     });
 
     this.data$.subscribe((data) => {
       this.topic = data.selectedTopic;
-      if (this.topic == null && this.topicId) {
-        this.getTopic(this.topicId);
-      }
-
-      if (this.topic && this.topic.id && !this.isSignalRConnectionInitialized) {
-        this.createSignalRConnection(this.topic.id);
-        this.isSignalRConnectionInitialized = true;
-      }
     });
   }
 
-  getTopic(id: string) {
-    this.store.dispatch(topicActions.getCurrentTopic({ id }));
-  }
-
-  createSignalRConnection(topicId: string) {
-    this.signalRService.startConnection('topicId', topicId);
+  createSignalRChatConnection(topicId: string) {
+    this.signalRService.startConnection('topicId', 'chat', topicId);
     this.signalRService.loadComments();
     this.signalRService.receiveComment();
+  }
+
+  createSignalRVoteConnection(topicId: string) {
+    this.signalRService.startConnection('topicId', 'vote', topicId);
+    this.signalRService.loadTopic();
+    this.signalRService.receiveVote();
   }
 
   editOrDelete(event: any) {
@@ -156,7 +154,8 @@ export class TopicDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.signalRService.stopConnection();
+    this.signalRService.stopConnection('chat');
+    this.signalRService.stopConnection('vote');
     this.store.dispatch(commentActions.clearComments());
   }
 }
