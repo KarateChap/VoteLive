@@ -1,8 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { authActions } from '../../pages/auth/store/auth.actions';
+import {
+  selectCurrentUser,
+  selectIsSubmitting,
+} from '../../pages/auth/store/auth.reducers';
+import { ConfirmPopup } from 'primeng/confirmpopup';
+import { combineLatest } from 'rxjs';
+
+interface FileUploadEvent {
+  originalEvent: Event;
+  files: File[];
+}
 
 @Component({
   selector: 'app-header',
@@ -12,6 +23,19 @@ import { authActions } from '../../pages/auth/store/auth.actions';
 export class HeaderComponent implements OnInit {
   items: MenuItem[] | undefined;
   menuItems: MenuItem[] | undefined;
+  visible: boolean = false;
+
+  currentUser$ = this.store.select(selectCurrentUser);
+  isSubmitting$ = this.store.select(selectIsSubmitting);
+
+  data$ = combineLatest({
+    currentUser: this.store.select(selectCurrentUser),
+    isSubmitting: this.store.select(selectIsSubmitting),
+  });
+
+  uploadedFiles: any[] = [];
+
+  @ViewChild(ConfirmPopup) confirmPopup!: ConfirmPopup;
 
   constructor(private router: Router, private store: Store) {}
 
@@ -36,9 +60,9 @@ export class HeaderComponent implements OnInit {
 
     this.menuItems = [
       {
-        label: 'Profile Settings',
+        label: 'Profile Info',
         icon: 'pi pi-cog',
-        command: (event: any) => this.onMenuClicked(event.item.label),
+        command: (event: any) => this.onMenuClicked(event.item.label, event),
       },
       {
         label: 'Logout',
@@ -61,10 +85,19 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  onMenuClicked(option: string) {
+  onMenuClicked(option: string, event?: any) {
     if (option === 'Logout') {
       this.store.dispatch(authActions.logout());
     } else {
+      this.showDialog();
     }
+  }
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  onUpload(event: any) {
+    this.store.dispatch(authActions.updateUserImage({ file: event.files[0] }));
   }
 }

@@ -1,9 +1,11 @@
-﻿using Application.Core;
+﻿
+using Application.Core;
 using Application.Interfaces;
 using Application.Topics;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Infrastructure;
+using Infrastructure.Photos;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -36,8 +38,9 @@ public static class ApplicationServiceExtensions
         services.AddValidatorsFromAssemblyContaining<Create>();
         services.AddHttpContextAccessor();
         services.AddScoped<IUserAccessor, UserAccessor>();
+        services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+        services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
         services.AddSignalR();
-
 
         return services;
     }

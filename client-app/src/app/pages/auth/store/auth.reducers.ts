@@ -65,6 +65,21 @@ const authFeature = createFeature({
       ...state,
       currentUser: null,
       token: null,
+    })),
+
+    // update user image
+    on(authActions.updateUserImage, (state) => ({
+      ...state,
+      isSubmitting: true,
+    })),
+    on(authActions.updateUserImageSuccess, (state, action) => ({
+      ...state,
+      isSubmitting: false,
+      currentUser: action.user,
+    })),
+    on(authActions.updateUserImageFailure, (state) => ({
+      ...state,
+      isSubmitting: false,
     }))
   ),
 });

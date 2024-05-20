@@ -85,6 +85,11 @@
                 </div>
               </div>
 
+              <span class="text-sm mt-4"
+                ><span class="font-bold">Poll Created By:</span>
+                {{ topic.creator.firstName }} {{ topic.creator.lastName }}</span
+              >
+
               <div class="w-full flex items-end justify-end mt-4">
                 <p-buttonGroup>
                   <p-button
@@ -114,6 +119,7 @@
               rows="5"
               cols="30"
               pInputTextarea
+              placeholder="Place your comment here..."
               [(ngModel)]="comment"
             ></textarea>
             <div class="flex w-full justify-end">

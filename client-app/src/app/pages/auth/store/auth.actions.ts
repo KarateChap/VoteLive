@@ -20,5 +20,9 @@ export const authActions = createActionGroup({
 
     logout: emptyProps(),
     'logout success': emptyProps(),
+
+    'update user image': props<{ file: Blob }>(),
+    'update user image success': props<{ user: User }>(),
+    'update user image failure': emptyProps(),
   },
 });

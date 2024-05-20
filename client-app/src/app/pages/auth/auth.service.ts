@@ -28,4 +28,10 @@ export class AuthService {
       registerUser
     );
   }
+
+  uploadImage(file: Blob): Observable<User> {
+    let formData = new FormData();
+    formData.append('File', file);
+    return this.http.post<User>(`${this.baseUrl}api/users`, formData);
+  }
 }

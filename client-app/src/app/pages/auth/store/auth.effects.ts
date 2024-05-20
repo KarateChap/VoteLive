@@ -104,3 +104,31 @@ export const logoutEffect = createEffect(
   },
   { functional: true }
 );
+
+export const updateUserImagerEffect = createEffect(
+  (
+    actions$ = inject(Actions),
+    authService = inject(AuthService),
+    toastService = inject(ToastService)
+  ) => {
+    return actions$.pipe(
+      ofType(authActions.updateUserImage),
+      switchMap(({ file }) => {
+        return authService.uploadImage(file).pipe(
+          map((user: User) => {
+            toastService.fireToast(
+              'success',
+              'Success',
+              'Image successfully updated.'
+            );
+            return authActions.updateUserImageSuccess({ user });
+          }),
+          catchError((error) => {
+            return of(authActions.updateUserImageFailure());
+          })
+        );
+      })
+    );
+  },
+  { functional: true }
+);

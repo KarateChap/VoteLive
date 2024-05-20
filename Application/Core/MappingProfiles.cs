@@ -14,7 +14,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Topic, Topic>();
         CreateMap<Option, OptionDto>();
-        CreateMap<AppUser, UserDto>();
+        CreateMap<AppUser, UserDto>()
+            .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl));
         CreateMap<Topic, TopicDto>()
             .ForMember(d => d.Creator, o => o.MapFrom(s => s.AppUser))
             .ForMember(d => d.Options, o => o.MapFrom(s => s.Options));

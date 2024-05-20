@@ -88,7 +88,7 @@ public class AccountController : ControllerBase
         {
             FirstName = user.FirstName,
             LastName = user.LastName,
-            ImageUrl = null,
+            ImageUrl = user.ImageUrl,
             Token = _tokenService.CreateToken(user),
             Username = user.UserName,
         };

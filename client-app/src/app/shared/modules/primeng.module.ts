@@ -37,6 +37,10 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ImageModule } from 'primeng/image';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   exports: [
@@ -76,6 +80,10 @@ import { ConfirmationService } from 'primeng/api';
     InputSwitchModule,
     SkeletonModule,
     ConfirmDialogModule,
+    ConfirmPopupModule,
+    ImageModule,
+    FileUploadModule,
+    ProgressSpinnerModule,
   ],
   providers: [MessageService, DialogService, ConfirmationService],
 })
